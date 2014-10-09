@@ -3,7 +3,7 @@
 #various utilities to administer the Coverity CIM, through the SOAP apis
 #See: cov_platform_web_service_api_ref.html
 #
-.PHONY: getallproj createproj
+.PHONY: getallproj createproj getcompmaps
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 configFile:=$(SELF_DIR)/.config
 # Read config params from .config file
@@ -13,11 +13,14 @@ port:=$(call config,'port')
 user:=$(call config,'username')
 pass:=$(call config,'password')
 csv:=$(call config,'csvfile')
-
+params:=--host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
 getallproj:
-	python getallproj.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv) 
+	python getallproj.py $(params)
 createproj:
-	python createproject.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
+	python createproject.py $(params)
+getcompmaps:
+	python getComponentMaps.py  $(params)
+
 
 
 
