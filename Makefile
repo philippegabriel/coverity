@@ -13,13 +13,14 @@ port:=$(call config,'port')
 user:=$(call config,'username')
 pass:=$(call config,'password')
 csv:=$(call config,'csvfile')
-params:=--host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
 getprojects:
-	python getProjects.py $(params)
+	python getProjects.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
 createproj:
-	python createproject.py $(params)
+	python createproject.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
 getcompmaps:
-	python getComponentMaps.py  $(params)
+	python getComponentMaps.py  --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
+createcompmap:
+	python createComponentMap.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile compmap.csv
 
 
 
