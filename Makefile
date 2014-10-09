@@ -14,8 +14,8 @@ user:=$(call config,'username')
 pass:=$(call config,'password')
 csv:=$(call config,'csvfile')
 params:=--host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
-getallproj:
-	python getallproj.py $(params)
+getprojects:
+	python getProjects.py $(params)
 createproj:
 	python createproject.py $(params)
 getcompmaps:
