@@ -21,6 +21,10 @@ getcompmaps:
 	python getComponentMaps.py  --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
 createcompmap:
 	python createComponentMap.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile compmap.csv
+test:
+	python test.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
+clean:
+	rm -f *.pyc
 
 
 
