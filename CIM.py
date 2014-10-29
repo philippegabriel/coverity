@@ -17,8 +17,8 @@ target_stream = options.stream
 import socket
 socket.setdefaulttimeout(None)
 import suds,logging
-logging.basicConfig(level=logging.INFO)
-logging.getLogger("suds.client").setLevel(logging.INFO)
+logging.basicConfig(level=logging.CRITICAL)
+logging.getLogger("suds.client").setLevel(logging.CRITICAL)
 CURSOR=None
 csvfile=options.csv
 #=================================setup services===================================

@@ -59,8 +59,10 @@ for row in f_csv:
 #Send the SOAP request
 try:
 	CIM.ConfServiceClient.service.createComponentMap(mapspec)
-except:
-	sys.exit('createComponentMap request failed')
+except f:
+	sys.exit(str(f.fault))
+except Exception, e: 
+	sys.exit(str(e))
 exit(0)
 
 	
