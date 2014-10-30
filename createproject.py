@@ -52,6 +52,71 @@ for stream in streams:
 			continue
 		else:
 			sys.exit(f.fault) 
-exit(0)
 
+#
+#Bind streams
+#
+for bind in binds:
+	try:
+#Prior to bind streams to project, retrieve the existing bindings
+		filter = CIM.ConfServiceClient.factory.create("projectFilterSpecDataObj")
+		filter.namePattern=bind[1]
+		filter.includeStreams=1
+		projectList = CIM.ConfServiceClient.service.getProjects(filter)
+#assert list is singleton
+		assert(len(projectList) == 1)
+		project=list.pop(projectList)
+		projectId = project.id
+		try:
+			streams = map(lambda x: x.id , project.streams)
+		except AttributeError:
+			streams = list()
+		try:
+			streamLinks = map(lambda x: x.id , project.streamLinks)
+		except AttributeError:
+			streamLinks = list()
+		print bind,streams
+		projectSpec = CIM.ConfServiceClient.factory.create("projectSpecDataObj")
+		stream = CIM.ConfServiceClient.factory.create("streamIdDataObj")
+		stream.name = bind[2]
+		streams.append(stream)
+		projectSpec.streams=streams
+		projectSpec.streamLinks=streamLinks
+		CIM.ConfServiceClient.service.updateProject(projectId,projectSpec)
+	except suds.WebFault as f:
+		sys.exit(f.fault) 
+#
+#Link streams
+# same as Bind, except for s/project.streams/project.streamLinks /
+#
+for link in links:
+	try:
+#Prior to bind streams to project, retrieve the existing bindings
+		filter = CIM.ConfServiceClient.factory.create("projectFilterSpecDataObj")
+		filter.namePattern=link[1]
+		filter.includeStreams=1
+		projectList = CIM.ConfServiceClient.service.getProjects(filter)
+#assert list is singleton
+		assert(len(projectList) == 1)
+		project=list.pop(projectList)
+		projectId = project.id
+		try:
+			streams = map(lambda x: x.id , project.streams)
+		except AttributeError:
+			streams = list()
+		try:
+			streamLinks = map(lambda x: x.id , project.streamLinks)
+		except AttributeError:
+			streamLinks = list()
+		print link,streams
+		projectSpec = CIM.ConfServiceClient.factory.create("projectSpecDataObj")
+		stream = CIM.ConfServiceClient.factory.create("streamIdDataObj")
+		stream.name = link[2]
+		streamLinks.append(stream)
+		projectSpec.streams=streams
+		projectSpec.streamLinks=streamLinks
+		CIM.ConfServiceClient.service.updateProject(projectId,projectSpec)
+	except suds.WebFault as f:
+		sys.exit(f.fault) 
+exit(0)
 
