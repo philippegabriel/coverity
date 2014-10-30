@@ -56,11 +56,11 @@ for stream in streams:
 #
 #Bind streams
 #
-for bind in binds:
+for i in binds+links:
 	try:
 #Prior to bind streams to project, retrieve the existing bindings
 		filter = CIM.ConfServiceClient.factory.create("projectFilterSpecDataObj")
-		filter.namePattern=bind[1]
+		filter.namePattern=i[1]
 		filter.includeStreams=1
 		projectList = CIM.ConfServiceClient.service.getProjects(filter)
 #assert list is singleton
@@ -75,44 +75,15 @@ for bind in binds:
 			streamLinks = map(lambda x: x.id , project.streamLinks)
 		except AttributeError:
 			streamLinks = list()
-		print bind,streams
 		projectSpec = CIM.ConfServiceClient.factory.create("projectSpecDataObj")
 		stream = CIM.ConfServiceClient.factory.create("streamIdDataObj")
-		stream.name = bind[2]
-		streams.append(stream)
-		projectSpec.streams=streams
-		projectSpec.streamLinks=streamLinks
-		CIM.ConfServiceClient.service.updateProject(projectId,projectSpec)
-	except suds.WebFault as f:
-		sys.exit(f.fault) 
-#
-#Link streams
-# same as Bind, except for s/project.streams/project.streamLinks /
-#
-for link in links:
-	try:
-#Prior to bind streams to project, retrieve the existing bindings
-		filter = CIM.ConfServiceClient.factory.create("projectFilterSpecDataObj")
-		filter.namePattern=link[1]
-		filter.includeStreams=1
-		projectList = CIM.ConfServiceClient.service.getProjects(filter)
-#assert list is singleton
-		assert(len(projectList) == 1)
-		project=list.pop(projectList)
-		projectId = project.id
-		try:
-			streams = map(lambda x: x.id , project.streams)
-		except AttributeError:
-			streams = list()
-		try:
-			streamLinks = map(lambda x: x.id , project.streamLinks)
-		except AttributeError:
-			streamLinks = list()
-		print link,streams
-		projectSpec = CIM.ConfServiceClient.factory.create("projectSpecDataObj")
-		stream = CIM.ConfServiceClient.factory.create("streamIdDataObj")
-		stream.name = link[2]
-		streamLinks.append(stream)
+		stream.name = i[2]
+		if i[0]=='bind':
+			streams.append(stream)
+		elif i[0]=='link':
+			streamLinks.append(stream)
+		else:
+			assert(0)
 		projectSpec.streams=streams
 		projectSpec.streamLinks=streamLinks
 		CIM.ConfServiceClient.service.updateProject(projectId,projectSpec)
