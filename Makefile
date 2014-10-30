@@ -16,13 +16,15 @@ csv:=$(call config,'csvfile')
 getprojects:
 	python getProjects.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
 createproj:
-	python createproject.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
+	python createproject.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv) 
 getcompmaps:
 	python getComponentMaps.py  --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
 createcompmap:
 	python createComponentMap.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile compmap.csv
-test:
-	python test.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
+query:
+	python query.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile compmap.csv
+test: delete createproj 
+	python getProjects.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv) > /tmp/out.csv
 delete:
 	python cleanup.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
 clean:
