@@ -23,8 +23,13 @@ createcompmap:
 	python createComponentMap.py --host $(host) --port $(port) --user $(user) --password $(pass) < compmap.csv
 query:
 	python query.py --host $(host) --port $(port) --user $(user) --password $(pass)
-testing: delete createproj 
-	python getProjects.py --host $(host) --port $(port) --user $(user) --password $(pass) > /tmp/out.csv
+testing: 
+	make delete 
+	make createproj 
+	make getprojects | grep '000' | sort > /tmp/out.csv
+	grep -v '#' $(csv)  | sort > /tmp/in.csv
+	diff -B /tmp/in.csv /tmp/out.csv
+	@echo 'Test PASS'
 delete:
 	python cleanup.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(csv)
 clean:
