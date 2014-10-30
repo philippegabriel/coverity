@@ -1,6 +1,5 @@
 #!/usr/bin/python
-import sys,csv,suds
-import CIM
+import sys,csv,suds,CIM
 filter = CIM.ConfServiceClient.factory.create("triageStoreFilterSpecDataObj")
 filter.namePattern='*'
 try:

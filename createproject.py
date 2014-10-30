@@ -1,14 +1,23 @@
 #!/usr/bin/python
-import sys,csv,suds
-import CIM
-newMappings=list()
+#
+#Create projects and streams in Coverity CIM
+#see: cov_platform_web_service_api_ref.html, methods getProjects & getStreams
+#
+#input is a dsl read on stdin
+#dsl definition:
+#project,<project id>,<description>
+#stream,<stream id>,<description>
+#bind,<project id>,<stream id>
+#link,<project id>,<stream id>
+#
+import sys,csv,suds,CIM
 #skip blank lines
-newMappings = filter(lambda x: x, csv.reader(sys.stdin))
+input = filter(lambda x: x, csv.reader(sys.stdin))
 #Extract projects, streams, bind, links
-projects=filter(lambda x: x[0] == 'project', newMappings)
-streams =filter(lambda x: x[0] == 'stream', newMappings)
-links   =filter(lambda x: x[0] == 'link', newMappings)
-binds   =filter(lambda x: x[0] == 'bind', newMappings)
+projects=filter(lambda x: x[0] == 'project', input)
+streams =filter(lambda x: x[0] == 'stream', input)
+links   =filter(lambda x: x[0] == 'link', input)
+binds   =filter(lambda x: x[0] == 'bind', input)
 
 #
 #Create projects

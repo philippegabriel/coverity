@@ -4,12 +4,11 @@
 #see: cov_platform_web_service_api_ref.html, deleteProject & deleteStream methods
 #
 import sys,csv,suds,CIM
-newMappings=list()
 #skip blank lines
-newMappings = filter(lambda x: x, csv.reader(sys.stdin))
+input = filter(lambda x: x, csv.reader(sys.stdin))
 #Extract projects, streams, bind, links
-projects=filter(lambda x: x[0] == 'project', newMappings)
-streams =filter(lambda x: x[0] == 'stream', newMappings)
+projects=filter(lambda x: x[0] == 'project', input)
+streams =filter(lambda x: x[0] == 'stream', input)
 
 #
 #Delete projects

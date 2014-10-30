@@ -1,4 +1,6 @@
 #!/usr/bin/python
+#Common definition for Coverity CIM SOAP methods
+#see: cov_platform_web_service_api_ref.html
 #See: https://communities.coverity.com/message/2836#2836
 
 #================================Get CLI params======================================
@@ -11,26 +13,17 @@ parser.add_option("-a", "--password", dest="password",  help="Set password token
 (options, args) = parser.parse_args()
 
 #=================================housekeeping=====================================
-import socket
-socket.setdefaulttimeout(None)
 import suds,logging
 logging.basicConfig(level=logging.CRITICAL)
 logging.getLogger("suds.client").setLevel(logging.CRITICAL)
 CURSOR=None
 #=================================setup services===================================
 MyUrl="http://"+options.host+":"+options.port
-#Seems deprecated in v8
-#MyAdmSrv=MyUrl+	"/ws/v8/administrationservice?wsdl"
-#http://dagu-4.uk.xensource.com:8080/ws/v8/configurationservice?wsdl
 MyConfSrv=MyUrl+"/ws/v8/configurationservice?wsdl"
-#http://dagu-4.uk.xensource.com:8080/ws/v8/defectservice?wsdl
 MyDefSrv=MyUrl+"/ws/v8/defectservice?wsdl"
 #Setup authorization
 Security = suds.wsse.Security()
 Security.tokens.append(suds.wsse.UsernameToken(options.username,options.password))
-#Administration Service Client - Users, Groups, Roles
-#AdminServiceClient = suds.client.Client(MyAdmSrv, timeout=3600)
-#AdminServiceClient.set_options(wsse=Security)
 #Configuration Service Client - Projects, Streams, Component Maps, Snapshots and Defect Attributes
 ConfServiceClient = suds.client.Client(MyConfSrv, timeout=3600)
 ConfServiceClient.set_options(wsse=Security)
