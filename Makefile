@@ -14,21 +14,24 @@ user:=$(call config,'username')
 pass:=$(call config,'password')
 csv:=$(call config,'csvfile')
 getprojects:
-	python getProjects.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
+	python getProjects.py --host $(host) --port $(port) --user $(user) --password $(pass)
 createproj:
-	python createproject.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv) 
+	python createproject.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(csv) 
 getcompmaps:
-	python getComponentMaps.py  --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
+	python getComponentMaps.py  --host $(host) --port $(port) --user $(user) --password $(pass)
 createcompmap:
-	python createComponentMap.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile compmap.csv
+	python createComponentMap.py --host $(host) --port $(port) --user $(user) --password $(pass) < compmap.csv
 query:
-	python query.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile compmap.csv
-test: delete createproj 
-	python getProjects.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv) > /tmp/out.csv
+	python query.py --host $(host) --port $(port) --user $(user) --password $(pass)
+testing: delete createproj 
+	python getProjects.py --host $(host) --port $(port) --user $(user) --password $(pass) > /tmp/out.csv
 delete:
-	python cleanup.py --host $(host) --port $(port) --user $(user) --password $(pass) --csvfile $(csv)
+	python cleanup.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(csv)
 clean:
 	rm -f *.pyc
+test:
+	python test.py < $(csv)
+
 
 
 

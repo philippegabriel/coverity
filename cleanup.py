@@ -3,16 +3,10 @@
 #Delete projects and streams from a Coverity CIM, using the SOAP apis
 #see: cov_platform_web_service_api_ref.html, deleteProject & deleteStream methods
 #
-import sys,csv,suds
-import CIM
-from CIM import csvfile
+import sys,csv,suds,CIM
 newMappings=list()
-try:
-	f=open(csvfile)
-except:
-	sys.exit('Cannot find '+csvfile)
 #skip blank lines
-newMappings = filter(lambda x: x, csv.reader(f))
+newMappings = filter(lambda x: x, csv.reader(sys.stdin))
 #Extract projects, streams, bind, links
 projects=filter(lambda x: x[0] == 'project', newMappings)
 streams =filter(lambda x: x[0] == 'stream', newMappings)

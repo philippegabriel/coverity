@@ -1,17 +1,29 @@
 #!/usr/bin/python
-#Dump projects and streams from a Coverity CIM, using the SOAP apis
-#see: cov_platform_web_service_api_ref.html
-import CIM
+#
+#Dump projects and streams from a Coverity CIM on stdout using the SOAP apis
+#see: cov_platform_web_service_api_ref.html, methods getProjects & getStreams
+#
+import sys, CIM
 #emit project definitions
 def getCIMMappings():
 	mappings=list()
 	projectsList = CIM.ConfServiceClient.service.getProjects()
 	for i in projectsList:
-		mappings.append(['project',i.id.name,(i.description if i.description else '')])
+		item=['project',i.id.name]
+		try:
+			item.append(i.description)
+		except AttributeError:
+			item.append('')
+		mappings.append(item)
 #emit stream definitions
 	streamsList = CIM.ConfServiceClient.service.getStreams()
 	for i in streamsList:
-		mappings.append(['stream',i.id.name,(i.description if i.description else '')])
+		item=['stream',i.id.name]
+		try:
+			item.append(i.description)
+		except AttributeError:
+			item.append('')
+		mappings.append(item)
 #emit project/stream bindings
 	for i in projectsList:
 		try:

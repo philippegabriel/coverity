@@ -8,10 +8,7 @@ parser.add_option("-c", "--host", dest="host", help="Set hostname or IP address 
 parser.add_option("-p", "--port", dest="port",	   help="Set port number to use",			  default="")
 parser.add_option("-u", "--user", dest="username", help="Set username to perform query",      default="admin")
 parser.add_option("-a", "--password", dest="password",  help="Set password token for the username specified",  default="")
-parser.add_option("-s", "--stream", dest="stream", 	  help="Set target stream for access",	  default="")
-parser.add_option("-f", "--csvfile", dest="csv", 	  help="csv file: project/stream map",	  default="")
 (options, args) = parser.parse_args()
-target_stream = options.stream
 
 #=================================housekeeping=====================================
 import socket
@@ -20,7 +17,6 @@ import suds,logging
 logging.basicConfig(level=logging.CRITICAL)
 logging.getLogger("suds.client").setLevel(logging.CRITICAL)
 CURSOR=None
-csvfile=options.csv
 #=================================setup services===================================
 MyUrl="http://"+options.host+":"+options.port
 #Seems deprecated in v8

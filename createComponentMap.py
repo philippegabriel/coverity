@@ -23,19 +23,10 @@
 #   <description>test00</description>
 #</componentMapSpec>
 
-import sys
-import CIM
-from CIM import csvfile
-#get component map from csv file
-import csv
-newMap=list()
-try:
-	f=open(csvfile)
-except:
-	sys.exit('Cannot find '+csvfile)
+import sys,csv,suds,CIM
+f_csv = csv.reader(sys.stdin)
 #Create the componentMapSpec object
 mapspec = CIM.ConfServiceClient.factory.create("componentMapSpec")
-f_csv = csv.reader(f)
 for row in f_csv:
 	if row==[]:
 		continue
@@ -59,7 +50,7 @@ for row in f_csv:
 #Send the SOAP request
 try:
 	CIM.ConfServiceClient.service.createComponentMap(mapspec)
-except f:
+except suds.WebFault as f:
 	sys.exit(str(f.fault))
 except Exception, e: 
 	sys.exit(str(e))

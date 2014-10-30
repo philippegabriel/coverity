@@ -1,15 +1,9 @@
 #!/usr/bin/python
 import sys,csv,suds
 import CIM
-#from csv2dictOfList import getCsvMap 
-from CIM import csvfile
 newMappings=list()
-try:
-	f=open(csvfile)
-except:
-	sys.exit('Cannot find '+csvfile)
 #skip blank lines
-newMappings = filter(lambda x: x, csv.reader(f))
+newMappings = filter(lambda x: x, csv.reader(sys.stdin))
 #Extract projects, streams, bind, links
 projects=filter(lambda x: x[0] == 'project', newMappings)
 streams =filter(lambda x: x[0] == 'stream', newMappings)
