@@ -24,16 +24,15 @@ createcompmap:
 query:
 	python query.py --host $(host) --port $(port) --user $(user) --password $(pass)
 testing: 
-	make delete 
+	make clean 
 	make createproj 
 	make getprojects | grep '000' | sort > /tmp/out.csv
 	grep -v '#' $(csv)  | sort > /tmp/in.csv
 	diff -B /tmp/in.csv /tmp/out.csv
 	@echo 'Test PASS'
-delete:
-	python cleanup.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(csv)
 clean:
 	rm -f *.pyc
+	python rmproject.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(csv)
 test:
 	python test.py < $(csv)
 
