@@ -1,0 +1,6 @@
+map,map0000,testing SOAP
+bind,map0000,comp0000,.*/path/xen/.*
+bind,map0000,comp0001,.*/path/foo/.*
+
+
+

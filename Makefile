@@ -12,29 +12,38 @@ host:=$(call config,'host')
 port:=$(call config,'port')
 user:=$(call config,'username')
 pass:=$(call config,'password')
-csv:=$(call config,'csvfile')
+projcsv:=testProjectAndStreams.csv
+cmcsv:=testComponentMap.csv
 getprojects:
 	python getProjects.py --host $(host) --port $(port) --user $(user) --password $(pass)
 createproj:
-	python createproject.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(csv) 
+	python createproject.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(projcsv) 
 getcompmaps:
 	python getComponentMaps.py  --host $(host) --port $(port) --user $(user) --password $(pass)
 createcompmap:
-	python createComponentMap.py --host $(host) --port $(port) --user $(user) --password $(pass) < compmap.csv
+	python createComponentMap.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(cmcsv)
 query:
 	python query.py --host $(host) --port $(port) --user $(user) --password $(pass)
 testing: 
 	make clean 
+	@echo '=================================[Testing Create Project & Streams...]=================='
 	make createproj 
 	make getprojects | grep '000' | sort > /tmp/out.csv
-	grep -v '#' $(csv)  | sort > /tmp/in.csv
+	grep -v '#' $(projcsv)  | sort > /tmp/in.csv
 	diff -B /tmp/in.csv /tmp/out.csv
-	@echo 'Test PASS'
+	@echo '=========================================[Test PASS]========================================='
+	@echo '=================================[Testing Create Component maps...]======================'
+	make createcompmap
+	make getcompmaps | grep '000' | sort > /tmp/out.csv
+	grep -v '#' $(cmcsv)  | sort > /tmp/in.csv
+	diff -B /tmp/in.csv /tmp/out.csv
+	@echo '=========================================[Test PASS]========================================='
 clean:
 	rm -f *.pyc
-	python rmproject.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(csv)
+	python rmproject.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(projcsv)
+	python rmComponentsMaps.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(cmcsv)
 test:
-	python test.py < $(csv)
+	python test.py < $(projcsv)
 
 
 

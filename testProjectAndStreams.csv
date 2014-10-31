@@ -1,0 +1,18 @@
+#create projects
+project,project0000,this is a test project
+project,project0001,this is a test project
+#create streams
+stream,stream0000,this is a test stream
+stream,stream0001,this is a test stream
+stream,stream0002,this is a test stream
+stream,stream0003,this is a test stream
+#bind streams and links to project
+bind,project0000,stream0000
+bind,project0001,stream0001
+link,project0000,stream0002
+link,project0001,stream0003
+
+
+
+
+

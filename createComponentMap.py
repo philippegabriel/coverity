@@ -48,12 +48,6 @@ for i in binds:
 #assert list is singleton
 		assert(len(currentmapspecList) == 1)
 		currentmapspec=list.pop(currentmapspecList)
-		try:
-			x=len(currentmapspec.componentPathRules)
-		except:
-			x=0
-			pass
-		print '####%s,%s,%d'%(currentmapspec.componentMapId.name,currentmapspec.description,x)
 #Create new component
 		mapspec = CIM.ConfServiceClient.factory.create('componentMapSpecDataObj')
 		mapspec.componentMapName=i[1]
