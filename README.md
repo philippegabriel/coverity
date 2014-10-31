@@ -6,12 +6,12 @@ Coverity documents a SOAP api, to interact with the Coverity "Connect" server.
 See: `/docs/en/api/cov_platform_web_service_api_ref.html`
 
 This repo contains a set of python scripts, to:
-* Get all **project** and associated **streams** from the server
-* Create **project** and **streams** and bind them
+* Get all **projects** and associated **streams** from the server
+* Create **projects** and **streams** and bind them
 * Get the **ComponentMaps** and associated **components** and **path rules** from the server
 * Create **ComponentMaps**, **components** and **path rules** and bind them
 
-The input for the create script is a csv file, which defines a trivial dsl, defined as:
+Scripts input is a csv file, which defines a trivial dsl:
 ```
 #project and stream commands
 project,<project id>,<description>
@@ -28,7 +28,7 @@ See: `testComponentMap.csv` & `testProjectAndStreams.csv` and the **testing** ta
 * Python (tested with 2.7.6) running on Ubuntu 14.04
 * Python suds module (tested with 0.4)
 
-## installation
+## Installation
 1. Clone this repo
 2. Create a `.config` file, that contains the address of the Coverity server and the credentials for a user allowed to create project, streams and ComponentMaps
 
@@ -41,6 +41,6 @@ password	<pass>
 ```
 Test the setup with ```make testing```
 
-## troubleshooting
+## Troubleshooting
 Refer to Coverity documentation `docs/en/api/cov_platform_web_service_api_ref.html#TP-Error_Codes-Error_Codes`
 
