@@ -52,6 +52,7 @@ host		<Coverity server dns name>
 port		<Coverity server port number, usually 8080>
 username	<username>
 password	<pass>
+stream          <stream name>
 ```
 Test the setup with ```make testing```
 
