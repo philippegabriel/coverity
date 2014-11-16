@@ -1,53 +1,17 @@
 #!/usr/bin/python
 
-import logging
-
 from suds.client import *
 from suds.wsse import *
-from datetime import timedelta
-from optparse import OptionParser
 
-##########
-# Basic operational SUDs stuff
-##########
-class Services :
-	def __init__(self) :
-		self.host = "http://127.0.0.1"
-		self.port = "8080"
-	
-	def setHost(self, in_host) :
-		self.host = in_host
+from CIM import *
 
-	def getHost(self) :
-		return self.host
-
-	def setPort(self, in_port) :
-		self.port = in_port
-	
-	def getPort(self) :
-		return self.port
-
-	def getURL(self, in_url) :
-		return self.host + ":" + self.port + "/ws/v4/" + in_url + "?wsdl"
-
-	def setServicesSecurity(self, client, in_user, in_pass) :
-		security = Security()
-		token = UsernameToken(in_user, in_pass)
-		security.tokens.append(token)
-		client.set_options(wsse=security)
-		
 ##########
 # Configuration Service (WebServices)
 ##########
-class ConfigurationService(Services) :
-	def __init__(self, in_host, in_port) :
+class ConfigurationService() :
+	def __init__(self, ConfServiceClient) :
 		print "Starting ConfigurationService\n"
-		self.setHost(in_host)
-		self.setPort(in_port)
-		self.client = Client(self.getURL("configurationservice"))
-	
-	def setSecurity(self, in_user, in_pass) :
-		self.setServicesSecurity(self.client, in_user, in_pass)
+                self.client = ConfServiceClient
 
 	def create(self, in_obj) :
 		return self.client.factory.create(in_obj)
@@ -77,15 +41,13 @@ class ConfigurationService(Services) :
 ##########
 # Defect Service (WebServices)
 ##########
-class DefectService(Services) :
-	def __init__(self, in_host, in_port) :
+class DefectService() :
+	def __init__(self) :
 		print "Starting DefectService\n"
-		self.setHost(in_host)
-		self.setPort(in_port)
-		self.client = Client(self.getURL("defectservice"))
-	
-	def setSecurity(self, in_user, in_pass) :
-		self.setServicesSecurity(self.client, in_user, in_pass)
+                # FIXME: looks like coverity different ws versions not compatible
+                MyDefSrvUrl=MyUrl+"/ws/v4/defectservice?wsdl"
+		self.client = suds.client.Client(MyDefSrvUrl, timeout=3600)
+                self.client.set_options(wsse=Security)
 
 	def create(self, in_obj) :
 		return self.client.factory.create(in_obj)
@@ -131,16 +93,10 @@ class DefectService(Services) :
 def main() :
 	# Configuration Information
 	target_stream = options.stream
-	port = options.port
-	hostname = options.hostname
-
-	username = options.username
-	password = options.password
 
 	# Begin by getting the configuration service to access the snapshot IDs
 	# that have been placed in the stream of interest.
-	cs = ConfigurationService("http://" + hostname, port)
-	cs.setSecurity(username, password)
+	cs = ConfigurationService(ConfServiceClient)
 	ssfs = cs.getSnapshotsForStream(target_stream)
 
 	# if we do not have any snapshots, simply return with a -1
@@ -150,8 +106,7 @@ def main() :
 	# Gather all CIDs relevant to this snapshot ID.  We begin by opening a
 	# DefectService client.
 	last_snapshot = ssfs[len(ssfs) - 1]
-	ds = DefectService("http://" + hostname, port)
-	ds.setSecurity(username, password)
+	ds = DefectService()
 	cids = ds.getSnapshotCIDs(target_stream, last_snapshot)
 
 	# get the information for the CIDs.  We will review it to be sure that all
@@ -181,26 +136,5 @@ def main() :
 	# we are done!
 	print "Task Complete.\n"
 
-##########
-# Should be at bottom of "Main Entry Point".  Points the script back up into
-# the appropriate entry function
-##########
-parser = OptionParser()
-parser.add_option("-c", "--host", dest="hostname", 
-                  help="Set hostname or IP address of CIM",
-				  default="127.0.0.1")
-parser.add_option("-p", "--port", dest="port",
-				  help="Set port number to use",
-				  default="8080")
-parser.add_option("-u", "--user", dest="username",
-				  help="Set username to perform query",
-				  default="")
-parser.add_option("-a", "--password", dest="password",
-				  help="Set password token for the username specified",
-				  default="")
-parser.add_option("-s", "--stream", dest="stream",
-				  help="Set target stream for access",
-				  default="")
-(options, args) = parser.parse_args()
 if __name__ == "__main__" :
 	main()

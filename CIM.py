@@ -10,6 +10,7 @@ parser.add_option("-c", "--host", dest="host", help="Set hostname or IP address 
 parser.add_option("-p", "--port", dest="port",	   help="Set port number to use",			  default="")
 parser.add_option("-u", "--user", dest="username", help="Set username to perform query",      default="admin")
 parser.add_option("-a", "--password", dest="password",  help="Set password token for the username specified",  default="")
+parser.add_option("-s", "--stream", dest="stream", help="Set target stream name", default="")
 (options, args) = parser.parse_args()
 
 #=================================housekeeping=====================================
