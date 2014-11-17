@@ -12,6 +12,7 @@ host:=$(call config,'host')
 port:=$(call config,'port')
 user:=$(call config,'username')
 pass:=$(call config,'password')
+stream:=$(call config,'stream')
 projcsv:=testProjectAndStreams.csv
 cmcsv:=testComponentMap.csv
 getprojects:
@@ -24,6 +25,8 @@ createcompmap:
 	python createComponentMap.py --host $(host) --port $(port) --user $(user) --password $(pass) < $(cmcsv)
 query:
 	python query.py --host $(host) --port $(port) --user $(user) --password $(pass)
+listdefect:
+	python listDefects.py --host $(host) --port $(port) --user $(user) --password $(pass) --stream $(stream)
 testing: 
 	make clean 
 	@echo '=================================[Testing Create Project & Streams...]=================='
